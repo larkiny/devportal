@@ -1,0 +1,16 @@
+{
+  "name": "@algorand/shared-theme",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Shared Starlight theme for Algorand Developer Portal microsites",
+  "exports": {
+    ".": "./index.ts",
+    "./components/*": "./components/*",
+    "./styles/*": "./styles/*",
+    "./assets/*": "./assets/*"
+  },
+  "peerDependencies": {
+    "@astrojs/starlight": "^0.36.0",
+    "astro": "^5.14.4"
+  }
+}
