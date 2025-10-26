@@ -52,13 +52,5 @@ export { default as RemoteCode } from './components/RemoteCode.astro';
 export { default as RemoteMarkdown } from './components/RemoteMarkdown.astro';
 export { default as SocialIcons } from './components/SocialIcons.astro';
 
-// Export homepage components
-export { default as HomepageHero } from './components/homepage/HomepageHero.astro';
-export { default as FeatureCta } from './components/homepage/FeatureCta.astro';
-export { default as CtaButton } from './components/homepage/CtaButton.astro';
-export { default as FeatureDetailCta } from './components/homepage/FeatureDetailCta.astro';
-export { default as IconCardGrid } from './components/homepage/IconCardGrid.astro';
-export { default as IconCard } from './components/homepage/IconCard.astro';
-
 // Export utilities
 export * from './components/Icons';
