@@ -134,8 +134,7 @@ export default defineConfig({
       ],
       favicon: '/favicon.png',
       customCss: [
-        '@algorand/shared-theme/styles/fonts.css',
-        '@algorand/shared-theme/styles/global.css',
+        './src/styles/site.css',
       ],
       sidebar: [
         {

@@ -187,7 +187,22 @@ To add a new microsite (e.g., for AlgoKit Utils TypeScript):
    }
    ```
 
-3. **Create `astro.config.mjs`** to use the shared theme:
+3. **Create `src/styles/site.css`** that imports Tailwind and shared theme:
+   ```css
+   /* src/styles/site.css */
+   @layer theme, base, components, utilities;
+
+   /* Import Tailwind CSS v4 */
+   @import 'tailwindcss/theme.css' layer(theme);
+   @import 'tailwindcss/utilities.css' layer(utilities);
+   @import '@astrojs/starlight-tailwind';
+
+   /* Import shared theme */
+   @import '@algorand/shared-theme/styles/fonts.css';
+   @import '@algorand/shared-theme/styles/global.css';
+   ```
+
+4. **Create `astro.config.mjs`** to use the shared theme:
    ```js
    import { defineConfig } from 'astro/config';
    import starlight from '@astrojs/starlight';
@@ -201,22 +216,19 @@ To add a new microsite (e.g., for AlgoKit Utils TypeScript):
            Header: '@algorand/shared-theme/components/Header.astro',
            // ... other shared components
          },
-         customCss: [
-           '@algorand/shared-theme/styles/fonts.css',
-           '@algorand/shared-theme/styles/global.css',
-         ],
+         customCss: ['./src/styles/site.css'],
        }),
      ],
    });
    ```
 
-4. **Copy fonts to public directory**:
+5. **Copy fonts to public directory**:
    ```bash
    mkdir -p sites/algokit-utils-ts/public/fonts
    cp packages/shared-theme/assets/fonts/* sites/algokit-utils-ts/public/fonts/
    ```
 
-5. **Add convenience scripts to root `package.json`**:
+6. **Add convenience scripts to root `package.json`**:
    ```json
    {
      "scripts": {

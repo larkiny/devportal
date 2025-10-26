@@ -59,13 +59,30 @@ import { HomepageHero } from '@algorand/shared-theme';
 
 ### Manual Style Imports
 
-To manually include styles:
+**Important**: The shared theme provides only theme variables and custom styles. You must import Tailwind CSS yourself in your microsite.
 
-```astro
----
-import '@algorand/shared-theme/styles/fonts.css';
-import '@algorand/shared-theme/styles/global.css';
----
+Create a site-specific CSS file (e.g., `src/styles/site.css`) that imports Tailwind first, then the shared theme:
+
+```css
+/* src/styles/site.css */
+@layer theme, base, components, utilities;
+
+/* Import Tailwind CSS v4 */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@astrojs/starlight-tailwind';
+
+/* Import shared theme */
+@import '@algorand/shared-theme/styles/fonts.css';
+@import '@algorand/shared-theme/styles/global.css';
+```
+
+Then reference it in your `astro.config.mjs`:
+
+```js
+starlight({
+  customCss: ['./src/styles/site.css'],
+})
 ```
 
 ## Package Structure

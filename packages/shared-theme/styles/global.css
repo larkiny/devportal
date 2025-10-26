@@ -1,8 +1,9 @@
-@layer theme, base, components, utilities;
-
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
-@import '@astrojs/starlight-tailwind';
+/**
+ * Shared Theme Styles for Algorand Developer Portal
+ *
+ * This file contains only theme variables and custom styles.
+ * Tailwind CSS and framework imports should be handled by the consuming site.
+ */
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
