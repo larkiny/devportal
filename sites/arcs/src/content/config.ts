@@ -3,20 +3,10 @@ import { docsSchema } from '@astrojs/starlight/schema';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { Octokit } from 'octokit';
 import { githubLoader } from '@larkiny/astro-github-loader';
-import { autoSidebarLoader } from 'starlight-auto-sidebar/loader';
-import { autoSidebarSchema } from 'starlight-auto-sidebar/schema';
-import type {
-  ImportOptions,
-  LoaderContext,
-} from '@larkiny/astro-github-loader';
+import type { ImportOptions, LoaderContext } from '@larkiny/astro-github-loader';
 
-// Import external repo doc configs
-import {
-  nodekitConfig,
-  algokitCLIConfig,
-  utilsTypescriptConfig,
-  utilsPythonConfig,
-} from '../../imports/configs/index.js';
+// Import ARC standards config
+import { arcStandardsConfig } from '../../imports/configs/arc-standards.js';
 
 const IMPORT_GITHUB = process.env.IMPORT_GITHUB === 'true';
 const IMPORT_DRY_RUN = process.env.IMPORT_DRY_RUN === 'true';
@@ -24,22 +14,17 @@ const FORCE_IMPORT = process.env.FORCE_IMPORT === 'true';
 const GITHUB_API_CLIENT = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
 
 // List of remote content configs to import
-const REMOTE_CONTENT: ImportOptions[] = [
-  nodekitConfig,
-  algokitCLIConfig,
-  utilsTypescriptConfig,
-  utilsPythonConfig,
-];
+const REMOTE_CONTENT: ImportOptions[] = [arcStandardsConfig];
 
 export const collections = {
   docs: defineCollection({
     loader: {
-      name: 'algorand-docs',
-      load: async context => {
+      name: 'arcs-docs',
+      load: async (context) => {
         await docsLoader().load(context);
 
         if (IMPORT_GITHUB) {
-          console.log('🔄 Importing content from GitHub repositories...');
+          console.log('🔄 Importing ARC standards from GitHub repository...');
 
           for (const config of REMOTE_CONTENT) {
             if (!config.enabled) continue;
@@ -62,9 +47,5 @@ export const collections = {
       },
     },
     schema: docsSchema(),
-  }),
-  autoSidebar: defineCollection({
-    loader: autoSidebarLoader(),
-    schema: autoSidebarSchema(),
   }),
 };

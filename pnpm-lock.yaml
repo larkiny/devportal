@@ -78,6 +78,58 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3
 
+  sites/arcs:
+    dependencies:
+      '@algorand/shared-theme':
+        specifier: workspace:*
+        version: link:../../packages/shared-theme
+      '@astrojs/check':
+        specifier: ^0.9.4
+        version: 0.9.4(prettier-plugin-astro@0.14.1)(prettier@3.3.3)(typescript@5.5.2)
+      '@astrojs/starlight':
+        specifier: ^0.36.0
+        version: 0.36.0(astro@5.14.4(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.50.0)(tsx@4.19.2)(typescript@5.5.2)(yaml@2.7.0))
+      '@astrojs/starlight-tailwind':
+        specifier: ^4.0.1
+        version: 4.0.1(@astrojs/starlight@0.36.0(astro@5.14.4(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.50.0)(tsx@4.19.2)(typescript@5.5.2)(yaml@2.7.0)))(tailwindcss@4.0.14)
+      '@astrojs/tailwind':
+        specifier: ^6.0.2
+        version: 6.0.2(astro@5.14.4(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.50.0)(tsx@4.19.2)(typescript@5.5.2)(yaml@2.7.0))(tailwindcss@4.0.14)
+      '@larkiny/astro-github-loader':
+        specifier: ^0.9.1
+        version: 0.9.1(astro@5.14.4(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.50.0)(tsx@4.19.2)(typescript@5.5.2)(yaml@2.7.0))
+      '@tailwindcss/vite':
+        specifier: ^4.0.14
+        version: 4.0.14(vite@6.3.6(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.2)(yaml@2.7.0))
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
+      astro:
+        specifier: ^5.14.4
+        version: 5.14.4(@types/node@22.12.0)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.50.0)(tsx@4.19.2)(typescript@5.5.2)(yaml@2.7.0)
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
+      octokit:
+        specifier: ^4.1.4
+        version: 4.1.4
+      tailwindcss:
+        specifier: ^4.0.14
+        version: 4.0.14
+    devDependencies:
+      '@types/node':
+        specifier: ^22.12.0
+        version: 22.12.0
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      prettier-plugin-astro:
+        specifier: ^0.14.1
+        version: 0.14.1
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+
   sites/main:
     dependencies:
       '@algorand/shared-theme':

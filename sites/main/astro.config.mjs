@@ -115,7 +115,7 @@ export default defineConfig({
       components: {
         Footer: '@algorand/shared-theme/components/Footer.astro',
         Header: '@algorand/shared-theme/components/Header.astro',
-        Hero: '@algorand/shared-theme/components/Hero.astro',
+        Hero: './src/components/Hero.astro',
         SiteTitle: '@algorand/shared-theme/components/SiteTitle.astro',
         ThemeProvider: '@algorand/shared-theme/components/CustomThemeProvider.astro',
         ThemeSelect: '@algorand/shared-theme/components/ThemeSelect.astro',

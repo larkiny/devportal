@@ -16,7 +16,11 @@
     "_section:main-site": "====================== Main Site Scripts ======================",
     "main:dev": "pnpm --filter algorand-devportal-main dev",
     "main:build": "pnpm --filter algorand-devportal-main build",
-    "main:preview": "pnpm --filter algorand-devportal-main preview"
+    "main:preview": "pnpm --filter algorand-devportal-main preview",
+    "_section:arcs-site": "====================== ARCs Site Scripts ======================",
+    "arcs:dev": "pnpm --filter algorand-arcs dev",
+    "arcs:build": "pnpm --filter algorand-arcs build",
+    "arcs:preview": "pnpm --filter algorand-arcs preview"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

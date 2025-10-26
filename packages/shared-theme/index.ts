@@ -18,7 +18,6 @@ export default function algorandThemePlugin(): StarlightPlugin {
           components: {
             Footer: './node_modules/@algorand/shared-theme/components/Footer.astro',
             Header: './node_modules/@algorand/shared-theme/components/Header.astro',
-            Hero: './node_modules/@algorand/shared-theme/components/Hero.astro',
             SiteTitle: './node_modules/@algorand/shared-theme/components/SiteTitle.astro',
             ThemeProvider: './node_modules/@algorand/shared-theme/components/CustomThemeProvider.astro',
             ThemeSelect: './node_modules/@algorand/shared-theme/components/ThemeSelect.astro',
@@ -38,7 +37,6 @@ export default function algorandThemePlugin(): StarlightPlugin {
 // Export commonly used components for direct import
 export { default as Footer } from './components/Footer.astro';
 export { default as Header } from './components/Header.astro';
-export { default as Hero } from './components/Hero.astro';
 export { default as SiteTitle } from './components/SiteTitle.astro';
 export { default as ThemeSelect } from './components/ThemeSelect.astro';
 export { default as CustomThemeProvider } from './components/CustomThemeProvider.astro';
