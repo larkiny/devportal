@@ -1,0 +1,6 @@
+packages:
+  # Shared packages (theme, config, utilities)
+  - 'packages/*'
+
+  # Individual microsite projects
+  - 'sites/*'

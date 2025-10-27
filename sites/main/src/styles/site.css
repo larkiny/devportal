@@ -1,0 +1,21 @@
+/**
+ * Main Site Styles
+ *
+ * This file imports Tailwind CSS framework and the shared theme.
+ * The order matters: Tailwind first, then shared theme customizations.
+ */
+
+/* Tailwind CSS v4 imports */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@astrojs/starlight-tailwind';
+
+/* Shared theme fonts */
+@import '@algorand/shared-theme/styles/fonts.css';
+
+/* Shared theme variables and styles */
+@import '@algorand/shared-theme/styles/global.css';
+
+/* Site-specific custom styles can go below */

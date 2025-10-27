@@ -1,0 +1,40 @@
+{
+  "name": "algorand-arcs",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Algorand Request for Comments (ARCs) Documentation",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint . && prettier -c ./src/** && astro check",
+    "lint:fix": "eslint . && prettier -c ./src/** --write && astro check",
+    "import:all": "IMPORT_GITHUB=true astro sync",
+    "import:force": "FORCE_IMPORT=true pnpm run import:all",
+    "clean": "rm -rf src/content/docs/* .astro"
+  },
+  "dependencies": {
+    "@algorand/shared-theme": "workspace:*",
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.36.0",
+    "@astrojs/starlight-tailwind": "^4.0.1",
+    "@astrojs/tailwind": "^6.0.2",
+    "@larkiny/astro-github-loader": "^0.9.1",
+    "@tailwindcss/vite": "^4.0.14",
+    "@types/js-yaml": "^4.0.9",
+    "astro": "^5.14.4",
+    "js-yaml": "^4.1.0",
+    "octokit": "^4.1.4",
+    "starlight-auto-sidebar": "^0.1.2",
+    "tailwindcss": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.5.2"
+  }
+}

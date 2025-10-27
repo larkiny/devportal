@@ -1,4 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "exclude": ["./examples", "./imports", "./dist"]
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["./examples", "./sites/*/imports", "./sites/*/dist", "./dist", "./packages/*/dist"]
 }

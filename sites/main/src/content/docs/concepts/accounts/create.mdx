@@ -1,0 +1,291 @@
+---
+title: Creating an account
+---
+
+import { Code } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { RemoteCode } from '@algorand/shared-theme';
+import { LinkCard } from '@astrojs/starlight/components';
+
+Algorand offers multiple methods to account creation, in this guide we'll explore the various methods available for creating accounts on the Algorand blockchain.
+
+Algorand supports multiple account types tailored to different use cases, from simple transactions to programmable smart contracts. [Standalone accounts](#standalone) (single key) are ideal for basic transfers, while [KMD-managed accounts](/nodes/reference/artifacts#kmd) offer secure key storage for applications. [Multisignature accounts](/concepts/accounts/multisig) enable shared control with configurable thresholds, and Logic Signature accounts allow for stateless programmatic control by compiling TEAL logic into a dedicated address. This section will explore how to utilize them in `algokit-utils` , `goal`, `algokey`, `SDKs`, and `Pera Wallet`, the reasons you might want to choose one method over another for your application.
+
+Another approach to account creation is using logic signature accounts, which are contract-based accounts that operate using a logic signature instead of a private key. To create an logic signature account, you write transaction validation logic and compile it to obtain the corresponding address, and fund it with the required minimum balance.
+
+Accounts participating in transactions are required to maintain a minimum balance of 100,000 micro Algos. Before using a newly created account in transactions, make sure that it has a sufficient balance by transferring at least 100,000 micro Algos to it. An initial transfer of under that amount will fail due to the minimum balance constraint. Refer [funding an account](/concepts/accounts/funding) for more details.
+
+## Standalone
+
+A standalone account is an Algorand address and private key pair that is not stored on disk. The private key is most often in the 25-word mnemonic form. Algorand's mobile wallet uses standalone accounts. Use the 25-word mnemonic to import accounts into the mobile wallet.
+
+| **When to Use Standalone Accounts**                                                                                                                                                                     | **When Not to Use Standalone Accounts**                                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Low setup cost: No need to connect to a separate client or hardware; all you need is the 25-word human-readable mnemonic of the relevant account.                                                       | Limited direct import/export options: Developers relying on import and export functions may find kmd more suitable, as [Algokit Utils TypeScript](algokit/utils/typescript/overview) or [Algokit Utils Python](algokit/utils/python/overview) provides import and export capabilities. |
+| Supports offline signing: Since private keys are not stored on disk, standalone accounts can be used in secure offline-signing procedures where hardware constraints may make using kmd more difficult. |                                                                                                                                                                                                                                                                                        |
+| Widely supported: Standalone account mnemonics are commonly used across various Algorand developer tools and services.                                                                                  |                                                                                                                                                                                                                                                                                        |
+
+### How to generate a standalone account
+
+There are different ways to create a standalone account:
+
+#### Algokey
+
+Algokey is a command-line utility for managing Algorand keys and it is used for generating, exporting, and importing keys.
+
+```shell showLineNumbers=false frame=none
+$ algokey generate
+Private key mnemonic: [PASSPHRASE]
+Public key: [ADDRESS]
+```
+
+#### Algokit Utils
+
+Developers can programmatically create accounts without depending on external key management systems, making it ideal for lightweight applications, offline signing, and minimal setup scenarios. AlgoKit Utils offers multiple ways to create and manage standalone accounts.
+
+##### Random Account Generation
+
+Developers can generate random accounts dynamically, each with a unique public/private key pair.
+
+<Tabs syncKey='lang'>
+  <TabItem label='Utils (TypeScript)' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/accounts/creating-accounts.ts'
+      snippet='RANDOM_ACCOUNTS'
+      lang='ts'
+      title='Random-Accounts'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Utils (Python)' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/accounts/creating_accounts.py'
+      snippet='RANDOM_ACCOUNTS'
+      lang='py'
+      title='Random-Accounts'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+##### Mnemonic-Based Account Recovery
+
+Developers can create accounts from an existing 25-word mnemonic phrase, allowing seamless account recovery and reuse of predefined test accounts.
+
+<Tabs syncKey='lang'>
+  <TabItem label='Utils (TypeScript)' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/accounts/creating-accounts.ts'
+      snippet='MNEMONIC_ACCOUNT'
+      lang='ts'
+      title='Mnemonic-Accounts'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Utils (Python)' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/accounts/creating_accounts.py'
+      snippet='MNEMONIC_ACCOUNT'
+      lang='py'
+      title='Mnemonic-Accounts'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+:::caution
+You can also create an account from environment variables as a standalone account. If it's not LocalNet, the account will be treated as standalone and loaded using mnemonic secret. Ensure the mnemonic is handled securely and not committed to source control.
+:::
+
+#### Pera Wallet
+
+Pera Wallet is a popular non-custodial wallet for the Algorand blockchain.
+
+<LinkCard
+  title='Create a new account on Pera Wallet'
+  href='https://support.perawallet.app/en/article/create-a-new-algorand-account-on-pera-wallet-1ehbj11/'
+  description='Getting started on how to create a New Algorand Account on Pera Wallet'
+
+/>
+
+#### Vault Wallet
+
+Hashicorp Vault implementation can also be used for managing Algorand standalone accounts securely. By leveraging Vault, you can store private keys and 25-word mnemonics securely, ensuring sensitive data is protected from unauthorized access. This implementation provides a streamlined way to create and manage standalone accounts while maintaining best practices for key management.
+
+The integration is particularly useful for developers and enterprises seeking a secure, API-driven approach to manage Algorand accounts at scale, without relying on local storage or manual handling of sensitive credentials.
+
+:::note
+More details coming soon
+:::
+
+## KMD-Managed Accounts
+
+The Key Management Daemon is a process that runs on Algorand nodes, so if you are using a third-party API service this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.
+
+| **When to Use KMD**                                                                                                                                                                                                            | **When Not to Use KMD**                                                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Single Master Derivation Key – Public/private key pairs are generated from a single master derivation key. You only need to remember the wallet passphrase/mnemonic to regenerate all accounts in the wallet.                  | Resource Intensive – Running `kmd` requires an active process and storing keys on disk. If you lack access to a node or need a lightweight solution, [Standalone Accounts](#standalone) may be a better option. |
+| Enhanced Privacy – There is no way to determine that two addresses originate from the same master derivation key, allowing applications to implement anonymous spending without requiring users to store multiple passphrases. |                                                                                                                                                                                                                 |
+
+:::caution
+KMD is not recommended for production.
+:::
+
+### How to use kmd
+
+#### Start the kmd process
+
+To initiate the kmd process and generate the required `kmd.net` and `kmd.token` files use [`goal kmd`](/nodes/reference/artifacts#goal) or [`kmd`](/nodes/reference/artifacts#kmd) command line utilities. To run kmd, you need to have the kmd library installed which comes with the node.
+
+Start kmd using goal with a 3600-second timeout.
+
+```shell showLineNumbers=false frame=none
+$ goal kmd start -t 3600
+Successfully started kmd
+```
+
+Kmd can directly be used using the following command
+
+```shell showLineNumbers=false frame=none
+$ kmd -d data/kmd-v<version>/ -t 3600
+```
+
+Once the kmd has started, retrieve the kmd IP address and access token:
+
+```shell showLineNumbers=false frame=none
+$ echo "kmd IP address: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.net
+kmd IP address:  [ip-address]:[port]
+
+$ echo "kmd token: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.token
+kmd token:  [token]
+```
+
+#### Create a wallet and generate an account
+
+Wallet and account can be created using different ways.
+
+##### goal
+
+Following are the commands to create a new wallet and a generate an account using goal,
+
+```shell showLineNumbers=false frame=none
+$ goal wallet new testwallet
+Please choose a password for wallet 'testwallet':
+Please confirm the password:
+Creating wallet...
+Created wallet 'testwallet'
+Your new wallet has a backup phrase that can be used for recovery.
+Keeping this backup phrase safe is extremely important.
+Would you like to see it now? (Y/n): y
+Your backup phrase is printed below.
+Keep this information safe -- never share it with anyone!
+
+[25-word mnemonic]
+
+$ goal account new
+Created new account with address [address]
+```
+
+##### Algokit Utils
+
+###### KMD client based Account creation
+
+We can also use the utils to create a wallet and account with the KMD client.
+
+<Tabs syncKey='lang'>
+  <TabItem label='Utils (TypeScript)' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/accounts/creating-accounts.ts'
+      snippet='KMD_ACCOUNT'
+      lang='ts'
+      title='Kmd Account'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Utils (Python)' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/accounts/creating_accounts.py'
+      snippet='KMD_ACCOUNT'
+      lang='py'
+      title='Kmd Account'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+Other operations like creating and renaming wallet can also be performed.
+
+<Tabs syncKey='lang'>
+  <TabItem label='Utils (TypeScript)' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/accounts/creating-accounts.ts'
+      snippet='KMD_WALLET_OPERATIONS'
+      lang='ts'
+      title='KMD Wallet Operations'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Utils (Python)' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/accounts/creating_accounts.py'
+      snippet='KMD_WALLET_OPERATIONS'
+      lang='py'
+      title='KMD Wallet Operations'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+###### Environment Variable-Based Account Creation
+
+To create an account using environment variable will load the account from a KMD wallet called name. When running against a local Algorand network, a funded wallet can be automatically created if it doesn’t exist.
+
+<Tabs syncKey='lang'>
+  <TabItem label='Utils (TypeScript)' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/accounts/creating-accounts.ts'
+      snippet='ENV_ACCOUNT'
+      lang='ts'
+      title='Environment Accounts'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Utils (Python)' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/accounts/creating_accounts.py'
+      snippet='ENV_ACCOUNT'
+      lang='py'
+      title='Environment Accounts'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+#### Recover wallet and regenerate account
+
+To recover a wallet and any previously generated accounts, use the wallet backup phrase also called the wallet mnemonic or passphrase. The master derivation key for the wallet will always generate the same addresses in the same order. Therefore the process of recovering an account within the wallet looks exactly like generating a new account.
+
+```shell showLineNumbers=false frame=none
+$ goal wallet new -r <recovered-wallet-name>
+Please type your recovery mnemonic below, and hit return when you are done:
+[25-word wallet mnemonic]
+Please choose a password for wallet [RECOVERED_WALLET_NAME]:
+Please confirm the password:
+Creating wallet...
+Created wallet [RECOVERED_WALLET_NAME]
+
+$ goal account new -w <recovered-wallet-name>
+Created new account with address [RECOVERED_ADDRESS]
+```
+
+An offline wallet may not accurately reflect account balances, but the state for those accounts e.g. its balance, online status is safely stored on the blockchain. kmd will repopulate those balances when connected to a node.
+
+:::caution
+For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however, keep in mind that an imported account can not be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
+:::
+
+#### HD Wallets
+
+Algorand's Hierarchical Deterministic wallet implementation, based on the ARC-0052 standard, enables the creation of multiple accounts from a single master seed. The API implementations are in TypeScript, Kotlin, and Swift, providing a consistent and efficient solution for managing multiple accounts with a single mnemonic.
+
+HD wallets are especially beneficial for applications that require streamlined account generation and enhanced privacy. By using this approach, developers can ensure all accounts are deterministically derived from a single seed phrase, making wallet management more convenient for both users and applications.

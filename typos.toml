@@ -1,6 +1,6 @@
 [files]
 extend-exclude = [
-    "src/content/docs/arc-standards/arc-*.md",
+    "src/content/docs/arc-*.md",
     "src/content/docs/reference/algokit-utils-ts/API Reference/**/*",
     "src/content/docs/reference/algorand-python/API Reference/**/*",
     "src/content/docs/reference/algokit-utils-py/API Reference/**/*",

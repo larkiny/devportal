@@ -1,0 +1,215 @@
+---
+title: Transaction Fees
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
+import { RemoteCode } from '@algorand/shared-theme';
+
+Blockchains like Algorand are decentralized networks with finite computational resources. Transaction fees serve as an essential economic mechanism to protect the network by requiring users to pay for the computational resources their transactions use. This fee structure protects Algorand against potential spam attacks that could overwhelm the system and prevent the blockchain from being trapped in infinite computational loops that compromise performance and security.
+
+## Minimum Fee
+
+The minimum fee for each transaction on Algorand is 1000 microAlgo or 0.001 Algo, and it is **fixed** to this amount when the network is not congested.
+
+## Fee Calculation Formula
+
+The total fee of a transaction is calculated using the following formula where:
+
+- `txn_in_bytes` is the size of the transaction in bytes
+- `fee_per_byte` is the current network's congestion-based fee per byte
+- `min_fee` is the minimum fee for a transaction
+
+```shell showLineNumbers=false frame=none title="Fee Calculation"
+fee = max(current_fee_per_byte*len(txn_in_bytes), min_fee)
+```
+
+If the network is not congested, the `current_fee_per_byte` will be zero, and the minimum transaction fee will be used.
+
+If the network is congested, the `current_fee_per_byte` will be non-zero. For a given transaction, if the product of the transaction's size in bytes and the current fee per byte is greater than the minimum fee, the product is used as the fee. Otherwise, the minimum fee is used.
+
+Transaction fees in Algorand apply uniformly across all transaction types—payments, Asset transfers, application calls, and others all use the same fee structure. Application call transaction fees also don't vary based on the complexity of the smart contract code being executed. Only the size of the serialized transaction determines the fee.
+
+## Suggested Fee
+
+The [algod REST server](/reference/rest-api/overview) provides [suggestedParams](/reference/rest-api/algod#transactionparams) that include the `fee` parameter which is the suggested `current fee per byte`. This suggested fee is used to determines transaction costs through this simple formula:
+
+```shell showLineNumbers=false frame=none title="Fee Calculation"
+fee = max(current_fee_per_byte * transaction_size_in_bytes, min_fee)
+```
+
+When the network isn't congested, `current_fee_per_byte` equals zero, simplifying the formula to:
+
+```shell showLineNumbers=false frame=none title="Fee Calculation (Normal Network Conditions)"
+fee = max(0, min_fee) = min_fee
+```
+
+This is why standard Algorand transactions cost **0.001 ALGO** or **1000 microAlgo** during normal network conditions.
+
+Here is an example of how to get suggested parameters using the Algorand Client.
+
+<Tabs syncKey='lang'>
+  <TabItem label='TypeScript' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/transactions/fees.ts'
+      snippet='SUGGESTED_PARAMS'
+      lang='ts'
+      title='Get suggested parameters'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Python' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/transactions/fees.py'
+      snippet='SUGGESTED_PARAMS'
+      lang='py'
+      title='Get suggested parameters'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+### Algorand Client Suggested Params Configuration
+
+The [Algorand Client](/algokit/utils/algokit-clients) caches suggested parameters provided by the network automatically to reduce network traffic. It has a set of default configurations that control this behavior, but the default configuration can be overridden and changed:
+
+- `algorand.setDefaultValidityWindow(validityWindow)` - Set the default validity window (number of rounds from the current known round that the transaction will be valid to be accepted for). Having a smallish value for this is usually ideal to avoid transactions that are valid for a long future period and may be submitted even after you think it failed to submit if waiting for a particular number of rounds for the transaction to be successfully submitted. The validity window defaults to 10, except in automated testing where it's set to 1000 when targeting LocalNet.
+- `algorand.setSuggestedParams(suggestedParams, until?)` - Set the suggested network parameters to use (optionally until the given time)
+- `algorand.setSuggestedParamsTimeout(timeout)` - Set the timeout that is used to cache the suggested network parameters (by default 3 seconds)
+- `algorand.getSuggestedParams()` - Get the current suggested network parameters object, either the cached value, or if the cache has expired a fresh value
+
+:::caution
+When using suggested fees, always set a maximum fee limit. During network congestion, fees become variable and could increase significantly based on network conditions.
+
+<Tabs syncKey='lang'>
+  <TabItem label='TypeScript' icon='seti:typescript'>
+    {' '}
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/transactions/fees.ts'
+      snippet='MAX_FEE'
+      lang='ts'
+      title='Set a maximum fee limit'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Python' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/transactions/fees.py'
+      snippet='MAX_FEE'
+      lang='py'
+      title='Set a maximum fee limit'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+:::
+
+## Flat Fee
+
+The suggested parameters include a `flat_fee` field that enables manual fee configuration. When set to `true`, you can specify exactly how much you want to pay for a transaction.
+
+If you choose this method, ensure your specified fee meets at least the minimum transaction fee (`min-fee`) available in the suggested parameters through the Algorand Client.
+
+### Use Cases for Flat Fees
+
+- Covering extra fees in transaction groups or app calls with inner transactions
+- Displaying specific rounded fees to users in applications
+- Preparing future transactions when network conditions are unknown
+- Handling non-urgent transactions that can be retried if rejected
+
+<Tabs syncKey='lang'>
+  <TabItem label='TypeScript' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/transactions/fees.ts'
+      snippet='FLAT_FEE'
+      lang='ts'
+      title='Flat fee'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Python' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/transactions/fees.py'
+      snippet='FLAT_FEE'
+      lang='py'
+      title='Flat fee'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+## Pooled Transaction Fees
+
+The Algorand protocol supports pooled fees, where one transaction can pay the fees of other transactions within the same [atomic group](/concepts/transactions/atomic-txn-groups).
+
+For atomic transactions, the fees set on all transactions in the group are summed. This sum is compared against the protocol determined expected fee for the group and may proceed as long as the sum of the fees is greater than or equal to the required fee for the group.
+
+{/* ![Atomic Pooled Fees](../../imgs/atomic_transfers-2.png)
+*Atomic Pooled Fees\* \*/}
+
+Below is an example of setting a pooled fee on an atomic group of two transactions. Here transaction B's fee is directly set to be 2x the minimum fee and transaction A's fee is set to zero. This atomic group will successfully execute because the sum of the fees is greater than or equal to the required fee for the group.
+
+<Tabs syncKey='lang'>
+  <TabItem label='TypeScript' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/transactions/fees.ts'
+      snippet='FEE_POOLING'
+      lang='ts'
+      title='Fee pooling'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Python' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/transactions/fees.py'
+      snippet='FEE_POOLING'
+      lang='py'
+      title='Fee pooling'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
+
+## Inner Transaction Fees
+
+[Inner transactions](/concepts/smart-contracts/inner-txn) are transactions sent by an application account. When an account makes an application call transaction to a contract method with one inner transaction, there are two ways to cover the associated inner transaction fee.
+
+- **App caller pays fees (recommended)**: The account calling the contract method pays for both the application call and the inner transaction fees through fee pooling. This approach is recommended because the inner transaction execution doesn't depend on the application account's ALGO balance.
+- **App account pays fees (not recommended)**: The application account itself pays the inner transaction fee using its own ALGO balance. This approach is discouraged because repeated calls to the method could deplete the application's ALGO balance, eventually resulting in "insufficient balance" errors that prevent the application from functioning.
+
+Smart Contract Inner transactions may have their fees covered by the outer transactions, but they cannot cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested smart contract inner transactions as well. For example, if Smart Contract A is called, which then calls Smart Contract B, which then calls Smart Contract C, then C's fee can not cover the call for B, which can not cover the call to A.
+
+Refer to the [Inner Transactions](/concepts/smart-contracts/inner-txn#payment) page for code examples.
+
+### Fee Structure
+
+Inner transaction fees are **fixed at 1,000 microAlgo** per transaction, regardless of network congestion. To properly cover fees:
+
+- For one inner transaction: Add 1,000 microALGO to the outer transaction fee
+- For two inner transactions: Add 2,000 microALGO to the outer transaction fee
+- And so on for additional inner transactions
+
+Here is an example of calling a smart contract with an inner transaction and covering the inner transaction fee with the outer transaction.
+
+This is the `payment` contract method that will be called and it has one inner payment transaction.
+
+<Tabs syncKey='lang'>
+  <TabItem label='TypeScript' icon='seti:typescript'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/typescript-examples/algokit-utils-ts/transactions/fees.ts'
+      snippet='INNER_TXN_FEE'
+      lang='ts'
+      title='Inner transaction fee'
+      frame='none'
+    />
+  </TabItem>
+  <TabItem label='Python' icon='seti:python'>
+    <RemoteCode
+      src='https://raw.githubusercontent.com/algorandfoundation/devportal-code-examples/refs/heads/main/projects/python-examples/algokit_utils_py_examples/transactions/fees.py'
+      snippet='INNER_TXN_FEE'
+      lang='py'
+      title='Inner transaction fee'
+      frame='none'
+    />
+  </TabItem>
+</Tabs>
