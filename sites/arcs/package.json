@@ -7,15 +7,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "pnpm run import",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint . && prettier -c ./src/** && astro check",
     "lint:fix": "eslint . && prettier -c ./src/** --write && astro check",
-    "_section:imports": "====================== ARC Imports ======================",
-    "init:submodules": "cd ../.. && git submodule update --init",
-    "import": "pnpm run init:submodules",
     "import:all": "IMPORT_GITHUB=true astro sync",
     "import:force": "FORCE_IMPORT=true pnpm run import:all",
     "clean": "rm -rf src/content/docs/* .astro"
@@ -32,6 +28,7 @@
     "astro": "^5.14.4",
     "js-yaml": "^4.1.0",
     "octokit": "^4.1.4",
+    "starlight-auto-sidebar": "^0.1.2",
     "tailwindcss": "^4.0.14"
   },
   "devDependencies": {

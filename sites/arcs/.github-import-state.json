@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "algorandfoundation/arcs@devportal": {
+      "name": "ARC Standards",
+      "repoId": "algorandfoundation/arcs@devportal",
+      "lastCommitSha": "2008c8be5cabfa3f35e5ba905dfb480df67f290b",
+      "lastImported": "2025-10-27T08:50:58.692Z",
+      "ref": "devportal"
+    }
+  },
+  "lastChecked": "2025-10-27T08:50:58.692Z"
+}

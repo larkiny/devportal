@@ -3,8 +3,9 @@ import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://arcs.algorand.dev',
-  description: 'Algorand Request for Comments (ARCs) - Technical standards for the Algorand ecosystem',
+  site: 'https://arcs.algorand.co',
+  description:
+    'Algorand Request for Comments (ARCs) - Technical standards for the Algorand ecosystem',
   output: 'static',
   vite: {
     plugins: [tailwindcss()],
@@ -12,7 +13,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Algorand ARCs',
-      description: 'Algorand Request for Comments (ARCs) - Technical standards for the Algorand ecosystem',
+      description:
+        'Algorand Request for Comments (ARCs) - Technical standards for the Algorand ecosystem',
       components: {
         Footer: '@algorand/shared-theme/components/Footer.astro',
         Header: '@algorand/shared-theme/components/Header.astro',
