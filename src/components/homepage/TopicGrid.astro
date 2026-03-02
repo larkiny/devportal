@@ -1,0 +1,111 @@
+---
+// TopicGrid — 6 curated topic sections in a 2-column grid with link lists.
+// Sits below PathwayCards on the homepage.
+
+interface TopicLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+interface TopicSection {
+  heading: string;
+  links: TopicLink[];
+}
+
+const sections: TopicSection[] = [
+  {
+    heading: 'Getting Started',
+    links: [
+      { label: 'Portal Guide', href: '/getting-started/portal-guide/' },
+      { label: 'AlgoKit Quick Start', href: '/getting-started/algokit-quick-start/' },
+      { label: 'Code Tutorials', href: 'https://tutorials.dev.algorand.co', external: true },
+      { label: 'Example Gallery', href: 'https://examples.dev.algorand.co', external: true },
+      { label: 'Video Course', href: '/getting-started/video-course/' },
+    ],
+  },
+  {
+    heading: 'Core Concepts',
+    links: [
+      { label: 'Accounts', href: '/concepts/accounts/overview/' },
+      { label: 'Transactions', href: '/concepts/transactions/overview/' },
+      { label: 'Assets', href: '/concepts/assets/overview/' },
+      { label: 'Smart Contracts', href: '/concepts/smart-contracts/overview/' },
+      { label: 'Consensus Protocol', href: '/concepts/protocol/overview/' },
+    ],
+  },
+  {
+    heading: 'Build with AlgoKit',
+    links: [
+      { label: 'AlgoKit CLI', href: '/algokit/cli/overview/' },
+      { label: 'Project Templates', href: '/algokit/project-templates/' },
+      { label: 'Utils (TypeScript)', href: '/algokit/utils/typescript/' },
+      { label: 'Utils (Python)', href: '/algokit/utils/python/' },
+      { label: 'Client Generators', href: '/algokit/client-generators/' },
+    ],
+  },
+  {
+    heading: 'Reference & APIs',
+    links: [
+      { label: 'TEAL Opcodes', href: '/reference/teal/opcodes/' },
+      { label: 'REST APIs', href: '/reference/rest-api/' },
+      { label: 'ARC Standards', href: '/reference/arc-standards/' },
+      { label: 'SDK Reference', href: '/reference/sdk/' },
+    ],
+  },
+  {
+    heading: 'Nodes & Network',
+    links: [
+      { label: 'Node Overview', href: '/nodes/overview/' },
+      { label: 'NodeKit', href: '/nodes/nodekit/' },
+      { label: 'Direct Installation', href: '/nodes/installation/' },
+      { label: 'Node Management', href: '/nodes/management/' },
+    ],
+  },
+  {
+    heading: 'Resources & Community',
+    links: [
+      { label: 'Discord', href: 'https://discord.gg/algorand', external: true },
+      { label: 'Contact the Foundation', href: 'https://algorand.co/algorand-foundation/contact', external: true },
+      { label: 'Liquid Auth', href: '/resources/liquid-auth/' },
+      { label: 'Bridging', href: '/resources/bridging/' },
+    ],
+  },
+];
+---
+
+<section class="w-full bg-white dark:bg-algo-navy">
+  <div class="max-w-[--breakpoint-home-container] mx-auto px-5 md:px-9 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+      {
+        sections.map((section) => (
+          <div class="border-t border-algo-lavender-300/30 dark:border-algo-teal-100/10 pt-4">
+            <h3 class="font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 mb-3 !mt-0">
+              {section.heading}
+            </h3>
+            <ul class="list-none !p-0 !m-0 space-y-2">
+              {section.links.map((link) => (
+                <li class="!p-0 !m-0">
+                  <a
+                    href={link.href}
+                    class="text-sm text-algo-navy dark:text-white hover:text-algo-lavender-400 dark:hover:text-algo-teal-400 no-underline transition-colors duration-200"
+                    {...(link.external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                  >
+                    {link.label}
+                    {link.external && (
+                      <span class="text-xs ml-1 opacity-50" aria-hidden="true">
+                        &#8599;
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
