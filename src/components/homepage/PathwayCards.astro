@@ -1,0 +1,56 @@
+---
+// PathwayCards — 4 primary developer journey cards in a responsive grid.
+// Sits directly below CompactHero on the homepage.
+
+const cards = [
+  {
+    title: 'Get Started',
+    description: 'Install AlgoKit and deploy your first smart contract.',
+    href: '/getting-started/algokit-quick-start/',
+  },
+  {
+    title: 'Smart Contracts',
+    description: 'Learn Algorand Python and TEAL for on-chain logic.',
+    href: '/concepts/smart-contracts/',
+  },
+  {
+    title: 'SDKs & Tools',
+    description: 'TypeScript and Python SDKs, CLI, and developer utilities.',
+    href: '/algokit/',
+  },
+  {
+    title: 'Run a Node',
+    description: 'Set up a validator node on the Algorand network.',
+    href: '/nodes/overview/',
+  },
+] as const;
+---
+
+<section class="w-full bg-white dark:bg-algo-navy">
+  <div class="max-w-[--breakpoint-home-container] mx-auto px-5 md:px-9 pb-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {
+        cards.map((card) => (
+          <a
+            href={card.href}
+            class:list={[
+              'group block no-underline rounded-lg',
+              'border border-algo-lavender-300 dark:border-algo-teal-100/20',
+              'hover:border-algo-lavender-400 dark:hover:border-algo-teal-400',
+              'hover:-translate-y-0.5 hover:shadow-md',
+              'transition-all duration-200',
+              'px-5 py-5',
+            ]}
+          >
+            <h3 class="text-algo-navy dark:text-white group-hover:text-algo-lavender-400 dark:group-hover:text-algo-teal-400 font-bold text-base !mt-0 !mb-1 transition-colors duration-200">
+              {card.title}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm !mt-0 !mb-0 leading-relaxed">
+              {card.description}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
