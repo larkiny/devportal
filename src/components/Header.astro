@@ -16,22 +16,22 @@ import { getLibraryFromPath } from '../config/libraries';
 const shouldRenderSearch =
   config.pagefind ||
   config.components.Search !== '@astrojs/starlight/components/Search.astro';
-const isHomepage = Astro.locals.starlightRoute.id === 'index.mdx';
+const isHomepage = Astro.locals.starlightRoute?.slug === '';
 const currentPath = Astro.url.pathname;
 const activeLibrary = getLibraryFromPath(currentPath);
 ---
 
 {
   isHomepage ? (
-    <div class='header sl-flex mx-auto px-4 md:px-9 gap-0!'>
+    <div class='header homepage-header mx-auto px-4 md:px-9'>
       <div class='grid w-full! max-w-[94px]! md:max-w-[113px]! h-[30px] md:h-[36px] mr-4! mb-[10px]!'>
         <SiteTitle />
       </div>
-      <div class='sl-flex ml-auto! gap-2 items-center'>
+      <div class='sl-flex gap-2 items-center justify-center'>
         {shouldRenderSearch && <Search {...Astro.props} />}
         <AIChatTrigger client:idle />
       </div>
-      <div class='sl-flex right-group gap-x-7! ml-7!'>
+      <div class='sl-flex right-group gap-x-7!'>
         <div class='sl-flex social-icons text-algo-lavender-400 dark:text-algo-teal-700'>
           <SocialIcons
             {...Astro.props}
@@ -108,6 +108,13 @@ const activeLibrary = getLibraryFromPath(currentPath);
   .social-icons {
     gap: 1rem;
     align-items: center;
+  }
+
+  .homepage-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    height: 100%;
   }
 
   .library-header {
