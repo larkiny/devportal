@@ -91,21 +91,6 @@ html:has(.homepage-hero) {
     }
   }
 
-  site-search button[data-open-modal] {
-    width: unset !important;
-    max-width: unset !important;
-    border: unset !important;
-    border-radius: unset !important;
-    display: block !important;
-    background-color: transparent !important;
-    padding: unset !important;
-
-    @apply text-algo-lavender-400! dark:text-algo-teal-700! text-[20px]! h-full! md:text-[25px]!;
-
-    .sl-hidden {
-      display: none !important;
-    }
-  }
 }
 
 /* ---- Table headers ---- */
