@@ -2,26 +2,48 @@
 // PathwayCards — 4 primary developer journey cards in a responsive grid.
 // Sits directly below CompactHero on the homepage.
 
+import { Icon } from 'astro-icon/components';
+
 const cards = [
   {
-    title: 'Get Started',
+    title: 'Get building',
     description: 'Install AlgoKit and deploy your first smart contract.',
     href: '/getting-started/algokit-quick-start/',
+    icon: 'start',
+    iconType: 'stroke' as const,
+    borderClass: 'border-t-algo-teal-500 dark:border-t-algo-teal-400',
+    bgClass: 'bg-algo-teal-500/5 dark:bg-algo-teal-400/10',
+    iconColorClass: 'text-algo-teal-500 dark:text-algo-teal-400',
   },
   {
     title: 'Smart Contracts',
     description: 'Learn Algorand Python and TEAL for on-chain logic.',
-    href: '/concepts/smart-contracts/',
+    href: '/concepts/smart-contracts/overview/',
+    icon: 'smart-contract',
+    iconType: 'stroke' as const,
+    borderClass: 'border-t-algo-lavender-300 dark:border-t-algo-lavender-200',
+    bgClass: 'bg-algo-lavender-300/5 dark:bg-algo-lavender-200/10',
+    iconColorClass: 'text-algo-lavender-300 dark:text-algo-lavender-200',
   },
   {
     title: 'SDKs & Tools',
     description: 'TypeScript and Python SDKs, CLI, and developer utilities.',
-    href: '/algokit/',
+    href: '/algokit/algokit-intro/',
+    icon: 'tools-icon',
+    iconType: 'fill' as const,
+    borderClass: 'border-t-[#01dc94]',
+    bgClass: 'bg-[#01dc94]/5 dark:bg-[#01dc94]/10',
+    iconColorClass: 'text-[#01dc94]',
   },
   {
     title: 'Run a Node',
     description: 'Set up a validator node on the Algorand network.',
     href: '/nodes/overview/',
+    icon: 'node-icon',
+    iconType: 'fill' as const,
+    borderClass: 'border-t-[#ff7f48]',
+    bgClass: 'bg-[#ff7f48]/5 dark:bg-[#ff7f48]/10',
+    iconColorClass: 'text-[#ff7f48]',
   },
 ] as const;
 ---
@@ -39,12 +61,25 @@ const cards = [
               'hover:border-algo-lavender-400 dark:hover:border-algo-teal-400',
               'hover:-translate-y-0.5 hover:shadow-md',
               'transition-all duration-200',
+              'border-t-[3px]',
+              card.borderClass,
+              card.bgClass,
               'px-5 py-5',
             ]}
           >
-            <h3 class="text-algo-navy dark:text-white group-hover:text-algo-lavender-400 dark:group-hover:text-algo-teal-400 font-bold text-base !mt-0 !mb-1 transition-colors duration-200">
-              {card.title}
-            </h3>
+            <div class="flex items-center gap-2 !mb-1">
+              <Icon
+                name={card.icon}
+                class:list={[
+                  'w-5 h-5 shrink-0',
+                  card.iconColorClass,
+                  card.iconType === 'fill' && '[&_path]:fill-current',
+                ]}
+              />
+              <h3 class="text-algo-navy dark:text-white group-hover:text-algo-lavender-400 dark:group-hover:text-algo-teal-400 font-bold text-base !mt-0 !mb-0 transition-colors duration-200">
+                {card.title}
+              </h3>
+            </div>
             <p class="text-gray-600 dark:text-gray-400 text-sm !mt-0 !mb-0 leading-relaxed">
               {card.description}
             </p>

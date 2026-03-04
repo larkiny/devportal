@@ -2,6 +2,8 @@
 // TopicGrid — 6 curated topic sections in a 2-column grid with link lists.
 // Sits below PathwayCards on the homepage.
 
+import { Icon } from 'astro-icon/components';
+
 interface TopicLink {
   label: string;
   href: string;
@@ -10,12 +12,16 @@ interface TopicLink {
 
 interface TopicSection {
   heading: string;
+  icon: string;
+  iconType: 'stroke' | 'fill';
   links: TopicLink[];
 }
 
 const sections: TopicSection[] = [
   {
-    heading: 'Getting Started',
+    heading: 'Getting started',
+    icon: 'getting-started',
+    iconType: 'fill',
     links: [
       { label: 'Portal Guide', href: '/getting-started/portal-guide/' },
       { label: 'AlgoKit Quick Start', href: '/getting-started/algokit-quick-start/' },
@@ -25,7 +31,9 @@ const sections: TopicSection[] = [
     ],
   },
   {
-    heading: 'Core Concepts',
+    heading: 'Core concepts',
+    icon: 'concepts',
+    iconType: 'stroke',
     links: [
       { label: 'Accounts', href: '/concepts/accounts/overview/' },
       { label: 'Transactions', href: '/concepts/transactions/overview/' },
@@ -36,6 +44,8 @@ const sections: TopicSection[] = [
   },
   {
     heading: 'Build with AlgoKit',
+    icon: 'build',
+    iconType: 'fill',
     links: [
       { label: 'AlgoKit CLI', href: '/algokit/cli/overview/' },
       { label: 'Project Templates', href: '/algokit/project-templates/' },
@@ -46,6 +56,8 @@ const sections: TopicSection[] = [
   },
   {
     heading: 'Reference & APIs',
+    icon: 'reference',
+    iconType: 'fill',
     links: [
       { label: 'TEAL Opcodes', href: '/reference/teal/opcodes/' },
       { label: 'REST APIs', href: '/reference/rest-api/' },
@@ -54,7 +66,9 @@ const sections: TopicSection[] = [
     ],
   },
   {
-    heading: 'Nodes & Network',
+    heading: 'Running a node',
+    icon: 'node-icon',
+    iconType: 'fill',
     links: [
       { label: 'Node Overview', href: '/nodes/overview/' },
       { label: 'NodeKit', href: '/nodes/nodekit/' },
@@ -63,7 +77,9 @@ const sections: TopicSection[] = [
     ],
   },
   {
-    heading: 'Resources & Community',
+    heading: 'Resources & community',
+    icon: 'community',
+    iconType: 'stroke',
     links: [
       { label: 'Discord', href: 'https://discord.gg/algorand', external: true },
       { label: 'Contact the Foundation', href: 'https://algorand.co/algorand-foundation/contact', external: true },
@@ -81,7 +97,14 @@ const sections: TopicSection[] = [
       {
         sections.map((section) => (
           <div class="!mt-0">
-            <h3 class="font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+            <h3 class="flex items-center gap-2 font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+              <Icon
+                name={section.icon}
+                class:list={[
+                  'w-[18px] h-[18px] shrink-0',
+                  section.iconType === 'fill' && '[&_path]:fill-current',
+                ]}
+              />
               {section.heading}
             </h3>
             <ul class="list-none !p-0 !m-0 space-y-2">

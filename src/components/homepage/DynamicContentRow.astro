@@ -2,6 +2,7 @@
 // DynamicContentRow — 2-column row with "Recently Updated" (curated) and
 // "Bulletins" (dynamically queried from the docs collection).
 
+import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 
 const recentlyUpdated = [
@@ -25,7 +26,8 @@ const recentBulletins = allBulletins
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 items-start">
       {/* Left column: Recently Updated */}
       <div class="!mt-0">
-        <h3 class="font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+        <h3 class="flex items-center gap-2 font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+          <Icon name="recently-updated" class="w-[18px] h-[18px] shrink-0 [&_path]:fill-current" />
           Recently Updated
         </h3>
         <ul class="list-none !p-0 !m-0 space-y-2">
@@ -44,7 +46,8 @@ const recentBulletins = allBulletins
 
       {/* Right column: Bulletins */}
       <div class="!mt-0">
-        <h3 class="font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+        <h3 class="flex items-center gap-2 font-bold text-base text-algo-lavender-400 dark:text-algo-teal-400 pb-2 mb-3 !mt-0 border-b-[3px] border-algo-lavender-300/40 dark:border-algo-teal-100/20">
+          <Icon name="bulletins" class="w-[18px] h-[18px] shrink-0 [&_path]:fill-current" />
           Bulletins
         </h3>
         {recentBulletins.length > 0 ? (
